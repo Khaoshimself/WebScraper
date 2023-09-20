@@ -1,12 +1,18 @@
-from bs4 import BeautifulSoup
 import requests
+from bs4 import BeautifulSoup
 
-try:
-    source = requests.get('https://realpython.github.io/fake-jobs/')
-    source.raise_for_status() #used to raise an error if url is not found
+URL = "https://realpython.github.io/fake-jobs/"
+page = requests.get(URL)
 
-    soup = BeautifulSoup(source.text, 'html.parser') 
-    print(soup)
+soup = BeautifulSoup(page.content, "html.parser")
+results = soup.find(id="ResultsContainer")
+job_elements = results.find_all("div", class_="card-content")
 
-except Exception as e:
-    print(e)
+for job_element in job_elements:
+    title_element = job_element.find("h2", class_="title")
+    company_element = job_element.find("h3", class_="company")
+    location_element = job_element.find("p", class_="location")
+    print(title_element.text.strip())
+    print(company_element.text.strip())
+    print(location_element.text.strip())
+    print()
