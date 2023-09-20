@@ -1,5 +1,10 @@
-import requests
+import requests, openpyxl
 from bs4 import BeautifulSoup
+
+excel = openpyxl.Workbook()
+sheet = excel.active
+sheet.title = 'Jobs'
+sheet.append(['Title', 'Company', 'Location'])
 
 URL = "https://realpython.github.io/fake-jobs/"
 page = requests.get(URL)
@@ -16,3 +21,6 @@ for job_element in job_elements:
     print(company_element.text.strip())
     print(location_element.text.strip())
     print()
+    sheet.append([title_element.text.strip(), company_element.text.strip(), location_element.text.strip()])
+
+excel.save('Python Job Scraper.xlsx')
